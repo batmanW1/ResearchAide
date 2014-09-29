@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-ResearchAide
-============
-
-An app to inform research participants
-=======
+=================================
 # Developers Guide to HIPAA Compliance
 =================================
 
