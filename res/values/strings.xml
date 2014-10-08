@@ -4,7 +4,14 @@
     <string name="app_name">Research Aide</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
+    <string name="new_username">Choose a username</string>
+    <string name="new_password">Choose a password</string>
+    <string name="check_password">Retype your password</string>
+    <string name="create_account">Create Account</string>
+    
 
 </resources>

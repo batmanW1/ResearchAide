@@ -1,12 +1,17 @@
 package edu.upenn.med.researchaide;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
 
 
 public class MainActivity extends ActionBarActivity {
+	
+	public static final int SignUpActivity_ID = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +37,10 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    public void onSignUpButtonClick(View view) {
+    	Intent i = new Intent(this, SignUpActivity.class);
+    	startActivityForResult(i, SignUpActivity_ID);
     }
 }

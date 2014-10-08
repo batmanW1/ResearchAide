@@ -73,8 +73,7 @@ import org.w3c.dom.Element;
 public class RedCap {
 	
 	static Logger logger = Logger.getLogger("RedCap") ;
-	//TODO Replace tokenID
-	static String tokenID = "B096772D07C1872671A52D227F1B7788";
+	static String tokenID = "4A7F2EC3F5562DD5B6AD115147647873";
 	
 	/**
 	 * Write new user details into RedCap
