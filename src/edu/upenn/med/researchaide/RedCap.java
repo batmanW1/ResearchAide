@@ -22,7 +22,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 
 
@@ -72,7 +72,7 @@ import org.w3c.dom.Element;
 
 public class RedCap {
 	
-	static Logger logger = Logger.getLogger("RedCap") ;
+	//static Logger logger = Logger.getLogger("RedCap") ;
 	static String tokenID = "4A7F2EC3F5562DD5B6AD115147647873";
 	
 	/**
@@ -116,7 +116,7 @@ public class RedCap {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return false;
 		}
 
@@ -143,7 +143,7 @@ public class RedCap {
 			System.out.println(new String(dataByte));
 			return true;
 		} catch (IOException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return false;
 		}
 	
@@ -173,7 +173,7 @@ public class RedCap {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return null;
 		}
 
@@ -203,12 +203,12 @@ public class RedCap {
 				}
 				return userNames;
 			} else {
-				logger.error("GetUserNames: Recieved Status " + response.getStatusLine());
+				//logger.error("GetUserNames: Recieved Status " + response.getStatusLine());
 				return null;
 				
 			}
 		} catch (IOException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return null;
 		}
 	
@@ -224,6 +224,7 @@ public class RedCap {
 	 */
 	
 	public static RedCapRecord exportUser(String userName) {
+		System.out.println("Got here");
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost("https://redcap.med.upenn.edu/api/");
 
@@ -239,7 +240,7 @@ public class RedCap {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return null;
 		}
 
@@ -284,12 +285,11 @@ public class RedCap {
 				return userRecord;
 
 			} else {
-				logger.error("ExportUsers: Recieved Status "
-						+ response.getStatusLine());
+				//logger.error("ExportUsers: Recieved Status " + response.getStatusLine());
 				return null;
 			}
 		} catch (IOException e1) {
-			logger.error(e1.getStackTrace());
+			//logger.error(e1.getStackTrace());
 			return null;
 		}
 	}

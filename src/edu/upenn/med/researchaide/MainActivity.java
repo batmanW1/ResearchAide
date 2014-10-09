@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 
 
 
@@ -38,9 +39,22 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    public void onSignUpButtonClick(View view) {
-    	Intent i = new Intent(this, SignUpActivity.class);
-    	startActivityForResult(i, SignUpActivity_ID);
+   
+    public void onLogInButtonClick(View view) {
+    	new Thread(new Runnable() {
+    		public void run() {
+    			EditText mUsernameEditText = (EditText)findViewById(R.id.userId);
+    	    	String username = mUsernameEditText.getText().toString();
+    	    	
+    	    	EditText mPasswordEditText = (EditText)findViewById(R.id.password);
+    	    	String password = mPasswordEditText.getText().toString();
+    	    	
+    	    	RedCapRecord user = RedCap.exportUser(username);
+    	    	if (user == null) {
+    	    		System.out.println("GOOD!");
+    	    	}
+    		}
+    		
+    	}).start();
     }
 }

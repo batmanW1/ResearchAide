@@ -7,6 +7,8 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -23,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:name="SignUpActivity"></activity>
+        <activity android:name="NewUserActivity"></activity>
     </application>
 
 </manifest>

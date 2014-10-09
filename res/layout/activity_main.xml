@@ -8,6 +8,12 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="edu.upenn.med.researchaide.MainActivity" >
+    
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -40,20 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:padding="10dp"
-            android:text="@string/log_in" />
+            android:text="@string/log_in" 
+            android:onClick="onLogInButtonClick"/>
     </LinearLayout>
-
-    <Button
-        android:id="@+id/signUpButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="4dp"
-        android:layout_marginBottom="15dp"
-        android:padding="10dp"
-        android:text="@string/sign_up" 
-        android:background="#DDDDDD" 
-        android:onClick="onSignUpButtonClick"/>
 
 </RelativeLayout>
