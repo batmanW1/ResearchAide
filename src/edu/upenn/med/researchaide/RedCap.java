@@ -224,7 +224,6 @@ public class RedCap {
 	 */
 	
 	public static RedCapRecord exportUser(String userName) {
-		System.out.println("Got here");
 		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost("https://redcap.med.upenn.edu/api/");
 
@@ -253,7 +252,6 @@ public class RedCap {
 			entity = response.getEntity();
 			StatusLine responseStatus = response.getStatusLine();
 			if (responseStatus != null && responseStatus.getStatusCode() == 200) {
-
 				entity = response.getEntity();
 				InputStream is = entity.getContent();
 				InputStreamReader isr = new InputStreamReader(is);
@@ -261,6 +259,12 @@ public class RedCap {
 				BufferedReader br1 = new BufferedReader(isr);
 				String headersString = br1.readLine();
 				String userDetailsString = br1.readLine();
+				
+				// Headers is printing out: "record_id, recap_event_name, name, email, password, my_first_instrument_complete, email_complete
+				// UserDetailsString is always null.
+				System.out.println("headersString: " + headersString);
+				System.out.println("userDetailsString: " + userDetailsString);
+				
 
 				String[] headers = headersString.replaceAll("\"", "")
 								    .split(",");
@@ -380,10 +384,10 @@ public class RedCap {
 		commitToRedCap(test);
 	}
 	
-	public static void main(String[] args) {
-		test();
-	}
-	
+//	public static void main(String[] args) {
+//		test();
+//	}
+//	
 }
 
 
