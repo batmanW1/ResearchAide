@@ -21,6 +21,7 @@ public class MainActivity extends ActionBarActivity {
 	String username;
 	EditText mPasswordEditText;
 	String password;
+	boolean isUser;
 	RedCapRecord user;
 	boolean gotUser;
 
@@ -58,20 +59,22 @@ public class MainActivity extends ActionBarActivity {
 		new Thread(runnable).start();
 		while (true) {
 			if (gotUser) {
-				System.out.println("User is " + user);
-				if (user == null) {
+				if (isUser == false) {
 					Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
 							Toast.LENGTH_LONG).show();
-							break;
+					break;
 				} else {
-					if (isCorrectPassword(password, user) == true) {
-						Intent i = new Intent(MainActivity.this,
-								IndexActivity.class);
-						startActivityForResult(i, IndexActivity_ID);
-						finish();
-					}
+					Toast.makeText(
+							MainActivity.this,
+							"Login Successful!",
+							Toast.LENGTH_LONG).show();
+					Intent i = new Intent(MainActivity.this, IndexActivity.class);
+					startActivityForResult(i, IndexActivity_ID);
+					// How do you pass variables from one activity to another?
+					finish();
+					break;
 				}
 			}
 		}
@@ -81,38 +84,9 @@ public class MainActivity extends ActionBarActivity {
 		public void run() {
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
-			HashMap<String,String> users = RedCap.getUserNames();
-			System.out.println("Size of username hashmap is: " + users.size());
-			user = RedCap.exportUser(username);
+			isUser = RedCap.verifyUser(username, password);
 			gotUser = true;
 		}
 	};
-
-	/*
-	 * public void onLogInButtonClick(View view) { new Thread(new Runnable() {
-	 * public void run() { EditText mUsernameEditText =
-	 * (EditText)findViewById(R.id.userId); String username =
-	 * mUsernameEditText.getText().toString();
-	 * 
-	 * EditText mPasswordEditText = (EditText)findViewById(R.id.password);
-	 * String password = mPasswordEditText.getText().toString();
-	 * 
-	 * RedCapRecord user = RedCap.exportUser(username); if (user == null) {
-	 * Looper.prepare(); Toast.makeText(MainActivity.this,
-	 * "Incorrect username or password. Please try again.",
-	 * Toast.LENGTH_LONG).show(); } else { if (isCorrectPassword(password, user)
-	 * == true) { Intent i = new Intent(MainActivity.this, IndexActivity.class);
-	 * startActivityForResult(i, IndexActivity_ID); } } }
-	 * 
-	 * }).start(); }
-	 */
-
-	public boolean isCorrectPassword(String password, RedCapRecord user) {
-		if (password.equals(user.recordAttributes.get(password))) {
-			return true;
-		}
-
-		return false;
-	}
 
 }
