@@ -3,24 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" 
-    android:background="#00B8E6">
+    android:background="#00B8E6" >
 
     <Button
         android:id="@+id/showInfoButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onInfoButtonClick"
         android:padding="10dp"
-        android:text="@string/showInfo" />
+        android:text="@string/showInfo"
+        android:onClick="onShowInfoButtonClick" />
     
     <Button
         android:id="@+id/changePasswordButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:onClick="onChangePasswordButtonClick"
         android:padding="10dp"
-        android:text="@string/changePassword" />
-
+        android:text="@string/changePassword"
+        android:onClick="onChangePasswordButtonClick" />
+    
+    <TextView 
+        android:id="@+id/userInformationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp" 
+        android:textSize="20sp" />
 </LinearLayout>

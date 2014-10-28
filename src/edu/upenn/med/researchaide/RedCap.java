@@ -110,11 +110,10 @@ public class RedCap {
 			System.out.println("Response is " + responseStatus.getStatusCode());
 			System.out.println(response.getStatusLine());
 			if (!(responseStatus != null && responseStatus.getStatusCode() == 200)) {
-
 				return false;
 			}
 
-			entity = response.getEntity();
+			//entity = response.getEntity();
 			InputStream is = entity.getContent();
 			byte[] dataByte = new byte[1024];
 			is.read(dataByte);
@@ -219,7 +218,6 @@ public class RedCap {
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
-			System.out.println("1");
 			// logger.error(e1.getStackTrace());
 			return false;
 		}
@@ -231,7 +229,6 @@ public class RedCap {
 		try {
 			response = httpclient.execute(httppost);
 			if (response == null) {
-				System.out.println("2");
 				return false;
 			}
 			entity = response.getEntity();
@@ -266,15 +263,13 @@ public class RedCap {
 				}
 			}
 
-			// logger.error("GetUserNames: Recieved Status " +
+			// logger.error("GetUserNames: Received Status " +
 			// response.getStatusLine());
 
 		} catch (IOException e1) {
-			System.out.println("3");
 			// logger.error(e1.getStackTrace());
 			return false;
 		}
-		System.out.println("4");
 		return false;
 	}
 	
@@ -307,8 +302,10 @@ public class RedCap {
 
 		try {
 			response = httpclient.execute(httppost);
-			if (response == null)
+			if (response == null) {
+				// test
 				return null;
+			}
 			entity = response.getEntity();
 
 			StatusLine responseStatus = response.getStatusLine();
@@ -324,6 +321,7 @@ public class RedCap {
 					String[] recordID_username = data.replaceAll("\"", "")
 							.split(",");
 					if (recordID_username[1].equals(username)) {
+						String record_id = recordID_username[0];
 						String userName = recordID_username[1];
 						String firstName = recordID_username[2];
 						String lastName = recordID_username[3];
@@ -333,7 +331,7 @@ public class RedCap {
 						String gender = recordID_username[8];
 						String race = recordID_username[7];
 						String hcg = recordID_username[9];
-						userInfo = new RedCapRecord(userName, firstName, lastName, emailID, password, age, gender, race, hcg);
+						userInfo = new RedCapRecord(record_id, userName, firstName, lastName, emailID, password, age, gender, race, hcg);
 						return userInfo;
 						}
 
@@ -391,16 +389,19 @@ public class RedCap {
 				BufferedReader br1 = new BufferedReader(isr);
 				String headersString = br1.readLine();
 				String userDetailsString = null;
-				// TODO Need to handle EOF in this while loop.
-				while (userDetailsString == null) {
+				int counter = 0;
+				
+				while(userDetailsString == null) {
+					counter++;
 					userDetailsString = br1.readLine();
 				}
 
-				// Headers is printing out: "record_id, recap_event_name, name,
-				// email, password, my_first_instrument_complete, email_complete
-				// UserDetailsString is always null.
-				System.out.println("headersString: " + headersString);
-				System.out.println("userDetailsString: " + userDetailsString);
+//				// Headers is printing out: "record_id, recap_event_name, name,
+//				// email, password, my_first_instrument_complete, email_complete
+//				// UserDetailsString is always null.
+//				System.out.println("headersString: " + headersString);
+//				System.out.println("userDetailsString: " + userDetailsString);
+				System.out.println(counter);
 
 				String[] headers = headersString.replaceAll("\"", "")
 						.split(",");
@@ -498,7 +499,7 @@ public class RedCap {
 
 	public static void test() {
 		int d = 1;
-		RedCapRecord test = new RedCapRecord("userName" + d, "firstName" + d,
+		RedCapRecord test = new RedCapRecord("record_id:" + d, "userName" + d, "firstName" + d,
 				"lastName" + d, "mail@mail.com" + d, "password" + d, 10, "M",
 				"Asian", "Test");
 		/*

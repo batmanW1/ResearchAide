@@ -1,13 +1,8 @@
 package edu.upenn.med.researchaide;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +16,7 @@ public class MainActivity extends ActionBarActivity {
 	String username;
 	EditText mPasswordEditText;
 	String password;
-	//boolean isUser;
-	RedCapRecord isUser;
+	boolean isUser;
 	RedCapRecord user;
 	boolean gotUser;
 
@@ -58,10 +52,11 @@ public class MainActivity extends ActionBarActivity {
 	public void onLogInButtonClick(View view) {
 		gotUser = false;
 		new Thread(runnable).start();
+		// we don't need the while loop here
 		while (true) {
 			if (gotUser) {
-				//if (isUser == false) {
-				if (isUser == null) {
+//				if (isUser == false) {
+				if (user == null) {
 					Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
@@ -73,8 +68,10 @@ public class MainActivity extends ActionBarActivity {
 							"Login Successful!",
 							Toast.LENGTH_LONG).show();
 					Intent i = new Intent(MainActivity.this, IndexActivity.class);
+					// passing the verified information to new activity
+					i.putExtra("verified_username", username);
+					i.putExtra("verified_password", password);
 					startActivityForResult(i, IndexActivity_ID);
-					// How do you pass variables from one activity to another?
 					finish();
 					break;
 				}
@@ -86,8 +83,8 @@ public class MainActivity extends ActionBarActivity {
 		public void run() {
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
-			//isUser = RedCap.verifyUser(username, password);
-			RedCapRecord isUser = RedCap.exportUser(username);
+//			isUser = RedCap.verifyUser(username, password);
+			user = RedCap.exportUser(username);
 			gotUser = true;
 		}
 	};

@@ -9,5 +9,10 @@
     <string name="log_in">Log In</string>
     <string name="showInfo">Your Information</string>
     <string name="changePassword">Change Your Password</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="old_password">Old Password</string>
+    <string name="new_password1">New Password</string>
+    <string name="new_password2">Retype New Password</string>
+    <string name="change_password">Change Password</string>
 
 </resources>
