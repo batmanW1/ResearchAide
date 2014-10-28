@@ -201,7 +201,7 @@ public class RedCap {
 		}
 
 	}
-	
+
 
 	/**
 	 * Get the details of a particular username
@@ -224,7 +224,8 @@ public class RedCap {
 		params.add(new BasicNameValuePair("content", "record"));
 		params.add(new BasicNameValuePair("format", "csv"));
 		params.add(new BasicNameValuePair("type", "flat"));
-		params.add(new BasicNameValuePair("records", userName));
+		//params.add(new BasicNameValuePair("records", userName));
+		params.add(new BasicNameValuePair("username", userName)); 
 		try {
 			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
@@ -248,140 +249,142 @@ public class RedCap {
 				BufferedReader br1 = new BufferedReader(isr);
 				String headersString = br1.readLine();
 				String userDetailsString = null;
-				int counter = 0;
-				
-				while(userDetailsString == null) {
-					counter++;
-					userDetailsString = br1.readLine();
+
+				while ((userDetailsString = br1.readLine()) != null) {
+					System.out.println(userDetailsString);
+					// Verifies username field only contains username. So username "johndoe" and username "johndoes" does not return 'true.'
+					if (userDetailsString.contains(",\"" + userName + "\",")) {
+						break;
+					}
 				}
+				System.out.println("userDetailsString: " + userDetailsString);
 
-//				// Headers is printing out: "record_id, recap_event_name, name,
-//				// email, password, my_first_instrument_complete, email_complete
-//				// UserDetailsString is always null.
-//				System.out.println("headersString: " + headersString);
-//				System.out.println("userDetailsString: " + userDetailsString);
-				System.out.println(counter);
+			//				// Headers is printing out: "record_id, recap_event_name, name,
+			//				// email, password, my_first_instrument_complete, email_complete
+			//				// UserDetailsString is always null.
+			//				System.out.println("headersString: " + headersString);
+			//				System.out.println("userDetailsString: " + userDetailsString);
 
-				String[] headers = headersString.replaceAll("\"", "")
-						.split(",");
+			String[] headers = headersString.replaceAll("\"", "")
+					.split(",");
 
-				if (userDetailsString == null) {
-					return null;
-				}
-
-				String[] usersDetail = userDetailsString.replaceAll("\"", "")
-						.split(",");
-
-				HashMap<String, String> userDetails = new HashMap<String, String>();
-
-				for (int i = 0; i < headers.length; i++) {
-					userDetails.put(headers[i], usersDetail[i]);
-
-				}
-
-				RedCapRecord userRecord = new RedCapRecord();
-				userRecord.recordAttributes = userDetails;
-
-				return userRecord;
-
-			} else {
-				// logger.error("ExportUsers: Recieved Status " +
-				// response.getStatusLine());
+			if (userDetailsString == null) {
 				return null;
 			}
-		} catch (IOException e1) {
-			// logger.error(e1.getStackTrace());
+
+			String[] usersDetail = userDetailsString.replaceAll("\"", "")
+					.split(",");
+
+			HashMap<String, String> userDetails = new HashMap<String, String>();
+
+			for (int i = 0; i < headers.length; i++) {
+				userDetails.put(headers[i], usersDetail[i]);
+
+			}
+
+			RedCapRecord userRecord = new RedCapRecord();
+			userRecord.recordAttributes = userDetails;
+
+			return userRecord;
+
+		} else {
+			// logger.error("ExportUsers: Recieved Status " +
+			// response.getStatusLine());
 			return null;
 		}
+	} catch (IOException e1) {
+		// logger.error(e1.getStackTrace());
+		return null;
 	}
+}
 
-	private static String buildCSV(RedCapRecord userDetails) {
-		if (userDetails == null || userDetails.recordAttributes == null)
+private static String buildCSV(RedCapRecord userDetails) {
+	if (userDetails == null || userDetails.recordAttributes == null)
+		return null;
+
+	return userDetails.getRecords();
+
+}
+
+public static String buildXMLString(RedCapRecord userDetails) {
+	try {
+
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory
+				.newInstance();
+		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+		// root elements
+		Document doc = docBuilder.newDocument();
+		Element rootElement = doc.createElement("records");
+		doc.appendChild(rootElement);
+
+		// staff elements
+		Element item = doc.createElement("item");
+		rootElement.appendChild(item);
+
+		if (userDetails.recordAttributes.keySet() == null)
 			return null;
 
-		return userDetails.getRecords();
+		Iterator<String> keys = userDetails.recordAttributes.keySet()
+				.iterator();
 
-	}
+		while (keys.hasNext()) {
+			String keyName = keys.next();
+			Element element = doc.createElement(keyName);
+			element.appendChild(doc
+					.createTextNode(userDetails.recordAttributes
+							.get(keyName)));
+			item.appendChild(element);
+		}
 
-	public static String buildXMLString(RedCapRecord userDetails) {
 		try {
+			StringWriter sw = new StringWriter();
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
+					"no");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-			// root elements
-			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("records");
-			doc.appendChild(rootElement);
-
-			// staff elements
-			Element item = doc.createElement("item");
-			rootElement.appendChild(item);
-
-			if (userDetails.recordAttributes.keySet() == null)
-				return null;
-
-			Iterator<String> keys = userDetails.recordAttributes.keySet()
-					.iterator();
-
-			while (keys.hasNext()) {
-				String keyName = keys.next();
-				Element element = doc.createElement(keyName);
-				element.appendChild(doc
-						.createTextNode(userDetails.recordAttributes
-								.get(keyName)));
-				item.appendChild(element);
-			}
-
-			try {
-				StringWriter sw = new StringWriter();
-				TransformerFactory tf = TransformerFactory.newInstance();
-				Transformer transformer = tf.newTransformer();
-				transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-						"no");
-				transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-				transformer.transform(new DOMSource(doc), new StreamResult(sw));
-				return sw.toString();
-			} catch (Exception ex) {
-				throw new RuntimeException("Error converting to String", ex);
-			}
-		} catch (ParserConfigurationException | RuntimeException ex) {
-			ex.printStackTrace();
-			return null;
+			transformer.transform(new DOMSource(doc), new StreamResult(sw));
+			return sw.toString();
+		} catch (Exception ex) {
+			throw new RuntimeException("Error converting to String", ex);
 		}
-
+	} catch (ParserConfigurationException | RuntimeException ex) {
+		ex.printStackTrace();
+		return null;
 	}
 
-	public static void test() {
-		int d = 1;
-		RedCapRecord test = new RedCapRecord("record_id:" + d, "userName" + d, "firstName" + d,
-				"lastName" + d, "mail@mail.com" + d, "password" + d, 10, "M",
-				"Asian", "Test");
-		/*
-		 * HashMap<String,String> users = getUserNames(); Iterator<String>
-		 * itUsers = users.keySet().iterator(); while(itUsers.hasNext()) {
-		 * String key = itUsers.next(); System.out.println("Looking for " +
-		 * key); RedCapRecord userDetails = exportUser(key); if(userDetails !=
-		 * null) { HashMap<String,String> userNames =
-		 * userDetails.recordAttributes; Iterator<String> it =
-		 * userNames.keySet().iterator();
-		 * 
-		 * while(it.hasNext()) { String keyName = it.next();
-		 * System.out.println(keyName + " -> " + userNames.get(keyName)); }
-		 * System.out.println("\n"); } }
-		 */
+}
 
-		commitToRedCap(test);
-	}
+public static void test() {
+	int d = 1;
+	RedCapRecord test = new RedCapRecord("record_id:" + d, "userName" + d, "firstName" + d,
+			"lastName" + d, "mail@mail.com" + d, "password" + d, 10, "M",
+			"Asian", "Test");
+	/*
+	 * HashMap<String,String> users = getUserNames(); Iterator<String>
+	 * itUsers = users.keySet().iterator(); while(itUsers.hasNext()) {
+	 * String key = itUsers.next(); System.out.println("Looking for " +
+	 * key); RedCapRecord userDetails = exportUser(key); if(userDetails !=
+	 * null) { HashMap<String,String> userNames =
+	 * userDetails.recordAttributes; Iterator<String> it =
+	 * userNames.keySet().iterator();
+	 * 
+	 * while(it.hasNext()) { String keyName = it.next();
+	 * System.out.println(keyName + " -> " + userNames.get(keyName)); }
+	 * System.out.println("\n"); } }
+	 */
 
-	// public static void main(String[] args) {
-	// test();
-	// }
-	//
+	commitToRedCap(test);
+}
+
+// public static void main(String[] args) {
+// test();
+// }
+//
 }
 
 /*

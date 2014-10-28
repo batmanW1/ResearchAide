@@ -28,6 +28,7 @@ public class IndexActivity extends Activity {
 	    Bundle extras = getIntent().getExtras();
 	    if (extras != null) {
 	    	verified_username = extras.getString("verified_username");
+	    	System.out.println(verified_username);
 	    	verified_password = extras.getString("verified_password");
 	    }
 	}
