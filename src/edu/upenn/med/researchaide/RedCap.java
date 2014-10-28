@@ -110,11 +110,10 @@ public class RedCap {
 			System.out.println("Response is " + responseStatus.getStatusCode());
 			System.out.println(response.getStatusLine());
 			if (!(responseStatus != null && responseStatus.getStatusCode() == 200)) {
-
 				return false;
 			}
 
-			entity = response.getEntity();
+			//entity = response.getEntity();
 			InputStream is = entity.getContent();
 			byte[] dataByte = new byte[1024];
 			is.read(dataByte);
@@ -202,149 +201,7 @@ public class RedCap {
 		}
 
 	}
-
-	/**
-	 * Verify if username and password are valid in RedCap.
-	 */
-	public static boolean verifyUser(String username, String password) {
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("https://redcap.med.upenn.edu/api/");
-
-		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>(5);
-		params.add(new BasicNameValuePair("token", tokenID));
-		params.add(new BasicNameValuePair("content", "record"));
-		params.add(new BasicNameValuePair("format", "csv"));
-		params.add(new BasicNameValuePair("type", "flat"));
-		// params.add(new BasicNameValuePair("fields", "userRecords"));
-		try {
-			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-		} catch (UnsupportedEncodingException e1) {
-			System.out.println("1");
-			// logger.error(e1.getStackTrace());
-			return false;
-		}
-
-		// Execute and get the response.
-		HttpResponse response = null;
-		HttpEntity entity = null;
-
-		try {
-			response = httpclient.execute(httppost);
-			if (response == null) {
-				System.out.println("2");
-				return false;
-			}
-			entity = response.getEntity();
-
-			StatusLine responseStatus = response.getStatusLine();
-
-			if (responseStatus != null && responseStatus.getStatusCode() == 200) {
-				entity = response.getEntity();
-				InputStream is = entity.getContent();
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader br1 = new BufferedReader(isr);
-				String data = br1.readLine();
-				// System.out.println("In RedCap getUserNames..." + data);
-				// HashMap<String,String> userNames = new
-				// HashMap<String,String>();
-				while ((data = br1.readLine()) != null) {
-					// System.out.println("In RedCap getUserNames part 2..." +
-					// data);
-
-					String[] recordID_username = data.replaceAll("\"", "")
-							.split(",");
-					if (recordID_username[1].equals(username)) {
-						if (recordID_username[5].equals(password)) {
-							return true;
-						}
-						// for (String info : recordID_username) {
-						// System.out.println("recordId_username contains: " +
-						// info);
-						// }
-
-					}
-				}
-			}
-
-			// logger.error("GetUserNames: Recieved Status " +
-			// response.getStatusLine());
-
-		} catch (IOException e1) {
-			System.out.println("3");
-			// logger.error(e1.getStackTrace());
-			return false;
-		}
-		System.out.println("4");
-		return false;
-	}
 	
-	/**
-	 * Retrieve user information from RedCap.
-	 */
-	
-	public static RedCapRecord getUserInfo(String username) {
-		RedCapRecord userInfo;
-		
-		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost("https://redcap.med.upenn.edu/api/");
-
-		List<BasicNameValuePair> params = new ArrayList<BasicNameValuePair>(5);
-		params.add(new BasicNameValuePair("token", tokenID));
-		params.add(new BasicNameValuePair("content", "record"));
-		params.add(new BasicNameValuePair("format", "csv"));
-		params.add(new BasicNameValuePair("type", "flat"));
-		// params.add(new BasicNameValuePair("fields", "userRecords"));
-		try {
-			httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
-		} catch (UnsupportedEncodingException e1) {
-			// logger.error(e1.getStackTrace());
-			return null;
-		}
-
-		// Execute and get the response.
-		HttpResponse response = null;
-		HttpEntity entity = null;
-
-		try {
-			response = httpclient.execute(httppost);
-			if (response == null)
-				return null;
-			entity = response.getEntity();
-
-			StatusLine responseStatus = response.getStatusLine();
-
-			if (responseStatus != null && responseStatus.getStatusCode() == 200) {
-				entity = response.getEntity();
-				InputStream is = entity.getContent();
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader br1 = new BufferedReader(isr);
-				String data = br1.readLine();
-
-				while ((data = br1.readLine()) != null) {
-					String[] recordID_username = data.replaceAll("\"", "")
-							.split(",");
-					if (recordID_username[1].equals(username)) {
-						String userName = recordID_username[1];
-						String firstName = recordID_username[2];
-						String lastName = recordID_username[3];
-						String emailID = recordID_username[4];
-						String password = recordID_username[5];
-						int age = Integer.parseInt(recordID_username[6]);
-						String gender = recordID_username[8];
-						String race = recordID_username[7];
-						String hcg = recordID_username[9];
-						userInfo = new RedCapRecord(userName, firstName, lastName, emailID, password, age, gender, race, hcg);
-						return userInfo;
-						}
-
-					}
-				}
-
-		} catch (IOException e1) {
-			return null;
-		}
-		return null;
-	}
 
 	/**
 	 * Get the details of a particular username
@@ -391,16 +248,19 @@ public class RedCap {
 				BufferedReader br1 = new BufferedReader(isr);
 				String headersString = br1.readLine();
 				String userDetailsString = null;
-				// TODO Need to handle EOF in this while loop.
-				while (userDetailsString == null) {
+				int counter = 0;
+				
+				while(userDetailsString == null) {
+					counter++;
 					userDetailsString = br1.readLine();
 				}
 
-				// Headers is printing out: "record_id, recap_event_name, name,
-				// email, password, my_first_instrument_complete, email_complete
-				// UserDetailsString is always null.
-				System.out.println("headersString: " + headersString);
-				System.out.println("userDetailsString: " + userDetailsString);
+//				// Headers is printing out: "record_id, recap_event_name, name,
+//				// email, password, my_first_instrument_complete, email_complete
+//				// UserDetailsString is always null.
+//				System.out.println("headersString: " + headersString);
+//				System.out.println("userDetailsString: " + userDetailsString);
+				System.out.println(counter);
 
 				String[] headers = headersString.replaceAll("\"", "")
 						.split(",");
@@ -498,7 +358,7 @@ public class RedCap {
 
 	public static void test() {
 		int d = 1;
-		RedCapRecord test = new RedCapRecord("userName" + d, "firstName" + d,
+		RedCapRecord test = new RedCapRecord("record_id:" + d, "userName" + d, "firstName" + d,
 				"lastName" + d, "mail@mail.com" + d, "password" + d, 10, "M",
 				"Asian", "Test");
 		/*
