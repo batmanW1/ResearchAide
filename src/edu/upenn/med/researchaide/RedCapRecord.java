@@ -26,7 +26,6 @@ public class RedCapRecord {
 			String emailID, String password, int age, String gender,
 			String race, String hcg) {
 		recordAttributes = new HashMap<String, String>();
-//		recordAttributes.put("record_id", userName);
 		recordAttributes.put("record_id", record_id);
 		recordAttributes.put("username", userName);
 		recordAttributes.put("firstname", firstName);

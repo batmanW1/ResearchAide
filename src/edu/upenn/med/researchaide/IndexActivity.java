@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import edu.upenn.med.researchaide.RedCapRecord;
 
 public class IndexActivity extends Activity {
 	
@@ -51,7 +52,7 @@ public class IndexActivity extends Activity {
 	Runnable runnable = new Runnable() {
 		
 		public void run() {
-			userRecord = RedCap.getUserInfo(verified_username);
+			userRecord = RedCap.exportUser(verified_username); //This may no longer work. Please test and verify.
 			userInfo = userRecord.toString();
 			gotInfo = true;
 		}

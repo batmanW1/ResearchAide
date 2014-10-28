@@ -53,14 +53,13 @@ public class ChangePasswordActivity extends ActionBarActivity {
 	
 	public void onConfirmChangeButtonClick(View view) {
 		
-		
 		String oldPasswordText = oldPassword.getText().toString();
 		String newPasswordText1 = newPassword1.getText().toString();
 		String newPasswordText2 = newPassword2.getText().toString();
 		
 		if (oldPasswordText.equals(userPassword)) {
 			Toast.makeText(this, 
-					"New Password can not be same with the old one, Please try again!",
+					"New Password can not be same as the old one. Please try again.",
 					Toast.LENGTH_LONG).show();
 			oldPassword.setText("");
 			newPassword1.setText("");
@@ -69,7 +68,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
 		
 		if (!newPassword1.equals(newPassword2)) {
 			Toast.makeText(this, 
-					"Retype password not match, Please try again!",
+					"New passwords do not match. Please try again.",
 					Toast.LENGTH_LONG).show();
 			oldPassword.setText("");
 			newPassword1.setText("");
