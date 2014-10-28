@@ -390,7 +390,11 @@ public class RedCap {
 				BufferedInputStream br = new BufferedInputStream(is);
 				BufferedReader br1 = new BufferedReader(isr);
 				String headersString = br1.readLine();
-				String userDetailsString = br1.readLine();
+				String userDetailsString = null;
+				// TODO Need to handle EOF in this while loop.
+				while (userDetailsString == null) {
+					userDetailsString = br1.readLine();
+				}
 
 				// Headers is printing out: "record_id, recap_event_name, name,
 				// email, password, my_first_instrument_complete, email_complete

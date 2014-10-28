@@ -21,7 +21,8 @@ public class MainActivity extends ActionBarActivity {
 	String username;
 	EditText mPasswordEditText;
 	String password;
-	boolean isUser;
+	//boolean isUser;
+	RedCapRecord isUser;
 	RedCapRecord user;
 	boolean gotUser;
 
@@ -59,7 +60,8 @@ public class MainActivity extends ActionBarActivity {
 		new Thread(runnable).start();
 		while (true) {
 			if (gotUser) {
-				if (isUser == false) {
+				//if (isUser == false) {
+				if (isUser == null) {
 					Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
@@ -84,7 +86,8 @@ public class MainActivity extends ActionBarActivity {
 		public void run() {
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
-			isUser = RedCap.verifyUser(username, password);
+			//isUser = RedCap.verifyUser(username, password);
+			RedCapRecord isUser = RedCap.exportUser(username);
 			gotUser = true;
 		}
 	};
