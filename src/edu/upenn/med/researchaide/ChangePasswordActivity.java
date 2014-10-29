@@ -10,10 +10,14 @@ import android.widget.Toast;
 
 public class ChangePasswordActivity extends ActionBarActivity {
 	
+	private String userName;
 	private String userPassword;
 	private EditText oldPassword;
 	private EditText newPassword1;
 	private EditText newPassword2;
+	private String oldPasswordText;
+	private String newPasswordText1;
+	private String newPasswordText2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +31,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
 		// get the extra values passed from last activity
 	    Bundle extras = getIntent().getExtras();
 	    if (extras != null) {
+	    	userName = extras.getString("username");
 	    	userPassword = extras.getString("old_password");
 	    }
 	    
@@ -53,38 +58,57 @@ public class ChangePasswordActivity extends ActionBarActivity {
 	
 	public void onConfirmChangeButtonClick(View view) {
 		
-		String oldPasswordText = oldPassword.getText().toString();
-		String newPasswordText1 = newPassword1.getText().toString();
-		String newPasswordText2 = newPassword2.getText().toString();
+		oldPasswordText = oldPassword.getText().toString();
+		newPasswordText1 = newPassword1.getText().toString();
+		newPasswordText2 = newPassword2.getText().toString();
 		
-		if (oldPasswordText.equals(userPassword)) {
+		System.out.println(userPassword);
+		System.out.println(oldPasswordText);
+		System.out.println(newPasswordText1);
+		System.out.println(newPasswordText2);
+		
+		if (!oldPasswordText.equals(userPassword)) {
 			Toast.makeText(this, 
-					"New Password can not be same as the old one. Please try again.",
+					"Old password does not match! Please try again!",
 					Toast.LENGTH_LONG).show();
 			oldPassword.setText("");
 			newPassword1.setText("");
 			newPassword2.setText("");
-		} 
-		
-		if (!newPassword1.equals(newPassword2)) {
+		} else if (newPasswordText1.equals(oldPasswordText)) {
+			Toast.makeText(this, 
+					"New Password must be different from the old one. Please try again!",
+					Toast.LENGTH_LONG).show();
+			oldPassword.setText("");
+			newPassword1.setText("");
+			newPassword2.setText("");
+		} else if (!newPasswordText1.equals(newPasswordText2)) {
 			Toast.makeText(this, 
 					"New passwords do not match. Please try again.",
 					Toast.LENGTH_LONG).show();
 			oldPassword.setText("");
 			newPassword1.setText("");
 			newPassword2.setText("");
+		} else {
+			new Thread(runnable).start();
+			Toast.makeText(this, 
+					"Password has changed successfully!",
+					Toast.LENGTH_LONG).show();
+			oldPassword.setText("");
+			newPassword1.setText("");
+			newPassword2.setText("");
+			finish();
 		}
-		
-		new Thread(runnable).start();
 	}
 	
 	Runnable runnable = new Runnable() {
 		
 		public void run() {
-			RedCapRecord rc = new RedCapRecord("3", "juntao", "Juntao", "Wang", "juntao@seas.upenn.edu", 
-					"1234", 24, "Male", "Asian", "142");
-			boolean isSuccess = RedCap.commitToRedCap(rc);
-			System.out.println(isSuccess);
+			
+			RedCapRecord old_rc = RedCap.exportUser(userName);
+			RedCapRecord new_rc = new RedCapRecord();
+			new_rc.recordAttributes = old_rc.recordAttributes;
+			new_rc.recordAttributes.put("password", newPasswordText1);
+			RedCap.commitToRedCap(new_rc);
 		}
 	};
 	
