@@ -14,5 +14,6 @@
     <string name="new_password1">New Password</string>
     <string name="new_password2">Retype New Password</string>
     <string name="change_password">Change Password</string>
+    <string name="back">Back</string>
 
 </resources>

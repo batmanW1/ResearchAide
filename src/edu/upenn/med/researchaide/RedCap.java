@@ -107,8 +107,6 @@ public class RedCap {
 			entity = response.getEntity();
 
 			StatusLine responseStatus = response.getStatusLine();
-			System.out.println("Response is " + responseStatus.getStatusCode());
-			System.out.println(response.getStatusLine());
 			if (!(responseStatus != null && responseStatus.getStatusCode() == 200)) {
 				return false;
 			}
@@ -117,7 +115,7 @@ public class RedCap {
 			InputStream is = entity.getContent();
 			byte[] dataByte = new byte[1024];
 			is.read(dataByte);
-			System.out.println(new String(dataByte));
+			//System.out.println(new String(dataByte));
 			return true;
 		} catch (IOException e1) {
 			// logger.error(e1.getStackTrace());
@@ -170,19 +168,10 @@ public class RedCap {
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br1 = new BufferedReader(isr);
 				String data = br1.readLine();
-				System.out.println("In RedCap getUserNames..." + data);
 				HashMap<String, String> userNames = new HashMap<String, String>();
 				while ((data = br1.readLine()) != null) {
-					System.out.println("In RedCap getUserNames part 2..."
-							+ data);
-
 					String[] recordID_username = data.replaceAll("\"", "")
 							.split(",");
-
-					for (String info : recordID_username) {
-						System.out.println("recordId_username contains: "
-								+ info);
-					}
 
 					if (recordID_username.length == 2)
 						userNames.put(recordID_username[0],
@@ -257,7 +246,6 @@ public class RedCap {
 						break;
 					}
 				}
-				System.out.println("userDetailsString: " + userDetailsString);
 
 			//				// Headers is printing out: "record_id, recap_event_name, name,
 			//				// email, password, my_first_instrument_complete, email_complete

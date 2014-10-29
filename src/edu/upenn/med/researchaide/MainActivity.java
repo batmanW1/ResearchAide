@@ -56,6 +56,8 @@ public class MainActivity extends ActionBarActivity {
 		// we don't need the while loop here
 		while (true) {
 			if (gotUser) {
+				System.out.println("isUser: " + isUser);
+				System.out.println("user is " + user);
 				if (isUser == false || user == null) {
 					Toast.makeText(
 							MainActivity.this,

@@ -22,26 +22,18 @@ public class IndexActivity extends Activity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_index);
 	    
-	    userInfoTextView = (TextView) findViewById(R.id.userInformationTextView);
-	    
 	    // get the extra values passed from last activity
 	    Bundle extras = getIntent().getExtras();
 	    if (extras != null) {
 	    	verified_username = extras.getString("verified_username");
-	    	System.out.println(verified_username);
 	    	verified_password = extras.getString("verified_password");
 	    }
 	}
 	
 	public void onShowInfoButtonClick(View view) {
-		gotInfo = false;
-		new Thread(runnable).start();
-		while (true) {
-			if (gotInfo) {
-				userInfoTextView.setText(userInfo);
-				break;
-			}
-		}
+		Intent i = new Intent(this, UserInfoActivity.class);
+		i.putExtra("edu.upenn.med.reseachaide.username", verified_username);
+		startActivity(i);
 	}
 	
 	public void onChangePasswordButtonClick(View view) {
@@ -50,12 +42,4 @@ public class IndexActivity extends Activity {
 		startActivity(i);
 	}
 	
-	Runnable runnable = new Runnable() {
-		
-		public void run() {
-			userRecord = RedCap.exportUser(verified_username); //This may no longer work. Please test and verify.
-			userInfo = userRecord.toString();
-			gotInfo = true;
-		}
-	};
 }
