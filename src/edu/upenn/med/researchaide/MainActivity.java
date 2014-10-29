@@ -3,6 +3,7 @@ package edu.upenn.med.researchaide;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,16 +58,20 @@ public class MainActivity extends ActionBarActivity {
 			if (gotUser) {
 //				if (isUser == false) {
 				if (user == null) {
-					Toast.makeText(
+					Toast toast = Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_LONG);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
 					break;
 				} else {
-					Toast.makeText(
+					Toast toast = Toast.makeText(
 							MainActivity.this,
 							"Login Successful!",
-							Toast.LENGTH_LONG).show();
+							Toast.LENGTH_LONG);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
 					Intent i = new Intent(MainActivity.this, IndexActivity.class);
 					// passing the verified information to new activity
 					i.putExtra("verified_username", username);
