@@ -2,6 +2,7 @@ package edu.upenn.med.researchaide;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,7 +85,9 @@ public class ChangePasswordActivity extends ActionBarActivity {
 		} else if (!newPasswordText1.equals(newPasswordText2)) {
 			Toast.makeText(this, 
 					"New passwords do not match. Please try again.",
-					Toast.LENGTH_LONG).show();
+					Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
 			oldPassword.setText("");
 			newPassword1.setText("");
 			newPassword2.setText("");
