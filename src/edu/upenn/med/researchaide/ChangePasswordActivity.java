@@ -83,7 +83,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
 			newPassword1.setText("");
 			newPassword2.setText("");
 		} else if (!newPasswordText1.equals(newPasswordText2)) {
-			Toast.makeText(this, 
+			Toast toast = Toast.makeText(this, 
 					"New passwords do not match. Please try again.",
 					Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
