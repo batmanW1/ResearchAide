@@ -1,7 +1,10 @@
 package edu.upenn.med.researchaide;
 
 import android.support.v7.app.ActionBarActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 	boolean isUser;
 	RedCapRecord user;
 	boolean gotUser;
+	private SharedPreferences saveUser ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,12 @@ public class MainActivity extends ActionBarActivity {
 
 		mUsernameEditText = (EditText) findViewById(R.id.userId);
 		mPasswordEditText = (EditText) findViewById(R.id.password);
+		
+		Context ctx = MainActivity.this;
+		saveUser = ctx.getSharedPreferences("userInfo", MODE_PRIVATE);
+		
+		mUsernameEditText.setText(saveUser.getString("user_name", ""));  
+		mPasswordEditText.setText(saveUser.getString("password", ""));
 
 	}
 
@@ -59,14 +69,20 @@ public class MainActivity extends ActionBarActivity {
 				System.out.println("isUser: " + isUser);
 				System.out.println("user is " + user);
 				if (isUser == false || user == null) {
-					Toast.makeText(
+					Toast toast = Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
 							Toast.LENGTH_LONG);
+					
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
 					break;
 				} else {
+					
+					Editor editor = saveUser.edit();
+					editor.putString("user_name", username).commit();
+					editor.putString("password", password).commit();
+					
 					Toast toast = Toast.makeText(
 							MainActivity.this,
 							"Login Successful!",
