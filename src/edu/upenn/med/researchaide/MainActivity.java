@@ -56,9 +56,10 @@ public class MainActivity extends ActionBarActivity {
 		// we don't need the while loop here
 		while (true) {
 			if (gotUser) {
-//				if (isUser == false) {
-				if (user == null) {
-					Toast toast = Toast.makeText(
+				System.out.println("isUser: " + isUser);
+				System.out.println("user is " + user);
+				if (isUser == false || user == null) {
+					Toast.makeText(
 							MainActivity.this,
 							"Incorrect username or password. Please try again.",
 							Toast.LENGTH_LONG);
@@ -88,8 +89,13 @@ public class MainActivity extends ActionBarActivity {
 		public void run() {
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
-//			isUser = RedCap.verifyUser(username, password);
 			user = RedCap.exportUser(username);
+			if (user != null) {
+				if (user.recordAttributes.get("username").equals(username) &&
+						user.recordAttributes.get("password").equals(password)) {
+					isUser = true;
+				}
+			}
 			gotUser = true;
 		}
 	};
