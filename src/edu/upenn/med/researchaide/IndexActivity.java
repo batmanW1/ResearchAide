@@ -39,6 +39,7 @@ public class IndexActivity extends Activity {
 	public void onChangePasswordButtonClick(View view) {
 		Intent i = new Intent(this, ChangePasswordActivity.class);
 		i.putExtra("old_password", verified_password);
+		i.putExtra("username", verified_username);
 		startActivity(i);
 	}
 	

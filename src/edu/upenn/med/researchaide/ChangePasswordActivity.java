@@ -63,46 +63,49 @@ public class ChangePasswordActivity extends ActionBarActivity {
 		newPasswordText1 = newPassword1.getText().toString();
 		newPasswordText2 = newPassword2.getText().toString();
 		
-		System.out.println(userPassword);
-		System.out.println(oldPasswordText);
-		System.out.println(newPasswordText1);
-		System.out.println(newPasswordText2);
-		
 		if (!oldPasswordText.equals(userPassword)) {
-			Toast.makeText(this, 
+			Toast toast = Toast.makeText(this, 
 					"Old password does not match! Please try again!",
-					Toast.LENGTH_LONG).show();
-			oldPassword.setText("");
-			newPassword1.setText("");
-			newPassword2.setText("");
+					Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			clearInfo();
 		} else if (newPasswordText1.equals(oldPasswordText)) {
-			Toast.makeText(this, 
+			Toast toast = Toast.makeText(this, 
 					"New Password must be different from the old one. Please try again!",
-					Toast.LENGTH_LONG).show();
-			oldPassword.setText("");
-			newPassword1.setText("");
-			newPassword2.setText("");
+					Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			clearInfo();
 		} else if (!newPasswordText1.equals(newPasswordText2)) {
 			Toast toast = Toast.makeText(this, 
 					"New passwords do not match. Please try again.",
 					Toast.LENGTH_LONG);
 			toast.setGravity(Gravity.CENTER, 0, 0);
 			toast.show();
-			oldPassword.setText("");
-			newPassword1.setText("");
-			newPassword2.setText("");
+			clearInfo();
 		} else {
 			new Thread(runnable).start();
-			Toast.makeText(this, 
+			Toast toast = Toast.makeText(this, 
 					"Password has changed successfully!",
-					Toast.LENGTH_LONG).show();
-			oldPassword.setText("");
-			newPassword1.setText("");
-			newPassword2.setText("");
+					Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			clearInfo();
 			finish();
 		}
 	}
 	
+	/**
+	 * Clear information in all text fields
+	 */
+	private void clearInfo() {
+		oldPassword.setText("");
+		newPassword1.setText("");
+		newPassword2.setText("");
+	}
+	
+	// put changing password into a new thread
 	Runnable runnable = new Runnable() {
 		
 		public void run() {
