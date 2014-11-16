@@ -32,7 +32,7 @@ public class IndexActivity extends Activity {
 
 	public void onShowInfoButtonClick(View view) {
 		Intent i = new Intent(this, UserInfoActivity.class);
-		i.putExtra("edu.upenn.med.reseachaide.username", verified_username);
+		//i.putExtra("edu.upenn.med.reseachaide.username", verified_username);
 		startActivity(i);
 	}
 

@@ -12,6 +12,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.*;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.model.*;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -107,7 +111,7 @@ public class MainActivity extends ActionBarActivity {
 			password = mPasswordEditText.getText().toString();
 			user = RedCap.exportUser(username);
 			if (user != null) {
-				if (user.recordAttributes.get("username").equals(username) &&
+				if (user.recordAttributes.get("email").equals(username) &&
 						user.recordAttributes.get("password").equals(password)) {
 					isUser = true;
 				}
