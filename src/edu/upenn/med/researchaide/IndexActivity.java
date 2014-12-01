@@ -9,42 +9,33 @@ import edu.upenn.med.researchaide.RedCapRecord;
 
 public class IndexActivity extends Activity {
 
-	private String verified_username;
-	private String verified_password;
-	private RedCapRecord userRecord;
-	private String userInfo;
-	private TextView userInfoTextView;
-	private boolean gotInfo;
-
+	private String record_id;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_index);
 
-		// get the extra values passed from last activity
+		// get the extra values passed from last activity (record_id)
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			verified_username = extras.getString("verified_username");
-			verified_password = extras.getString("verified_password");
+			record_id = extras.getString("record_id");
 		}
 	}
-
-	public void onShowInfoButtonClick(View view) {
-		Intent i = new Intent(this, UserInfoActivity.class);
-		//i.putExtra("edu.upenn.med.reseachaide.username", verified_username);
-		startActivity(i);
-	}
-
-	public void onChangePasswordButtonClick(View view) {
-		Intent i = new Intent(this, ChangePasswordActivity.class);
-		i.putExtra("old_password", verified_password);
-		i.putExtra("username", verified_username);
+	
+	public void onScheduleButtonClick(View view) {
+		Intent i = new Intent(this, ScheduleActivity.class);
 		startActivity(i);
 	}
 
 	public void onDirectionButtonClick(View view) {
 		Intent i = new Intent(this, DirectionActivity.class);
+		startActivity(i);
+	}
+	
+	public void onCompensationButtonClick(View view) {
+		Intent i = new Intent(this, CompensationActivity.class);
 		startActivity(i);
 	}
 

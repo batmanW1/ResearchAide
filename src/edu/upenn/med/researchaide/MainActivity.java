@@ -122,8 +122,7 @@ public class MainActivity extends ActionBarActivity {
 				
 				// passing the verified information to new activity
 				Intent i = new Intent(MainActivity.this, IndexActivity.class);
-				i.putExtra("verified_username", username);
-				i.putExtra("verified_password", password);
+				i.putExtra("record_id", user.recordAttributes.get("record_id"));
 				startActivityForResult(i, IndexActivity_ID);
 			}
 		}

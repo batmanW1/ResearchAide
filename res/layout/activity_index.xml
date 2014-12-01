@@ -21,7 +21,7 @@
         android:id="@+id/ScheduleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onDirectionButtonClick"
+        android:onClick="onScheduleButtonClick"
         android:contentDescription="@string/title_activity_schedule"
         android:background="@drawable/schedule"
 		android:layout_gravity="center" />
@@ -48,7 +48,7 @@
         android:id="@+id/CompensationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onDirectionButtonClick"
+        android:onClick="onCompensationButtonClick"
         android:contentDescription="@string/title_activity_compensation"
         android:background="@drawable/compensation" 
         android:layout_gravity="center" />
