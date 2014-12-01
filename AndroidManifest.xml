@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="IndexActivity" />
         </activity>
+        <activity
+            android:name=".ScheduleActivity"
+            android:label="@string/title_activity_schedule" >
+        </activity>
+        <activity
+            android:name=".CompensationActivity"
+            android:label="@string/title_activity_compensation" >
+        </activity>
     </application>
 
 </manifest>
