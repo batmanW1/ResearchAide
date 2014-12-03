@@ -21,7 +21,7 @@
         android:id="@+id/ScheduleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onScheduleButtonClick"
+        android:onClick="onDirectionButtonClick"
         android:contentDescription="@string/title_activity_schedule"
         android:background="@drawable/schedule"
 		android:layout_gravity="center" />
@@ -39,7 +39,7 @@
         android:id="@+id/TellFriendButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onDirectionButtonClick"
+        android:onClick="onTellFriendButtonClick"
         android:contentDescription="@string/title_activity_friend"
         android:background="@drawable/friend" 
         android:layout_gravity="center" />
@@ -48,7 +48,7 @@
         android:id="@+id/CompensationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onCompensationButtonClick"
+        android:onClick="onDirectionButtonClick"
         android:contentDescription="@string/title_activity_compensation"
         android:background="@drawable/compensation" 
         android:layout_gravity="center" />

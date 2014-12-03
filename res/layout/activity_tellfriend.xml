@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0092AD"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        
+    	<EditText
+        	android:id="@+id/txtPhoneNo"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="20dp"
+        	android:layout_marginLeft="20dp"
+        	android:hint="@string/enterNo"
+        	android:inputType="phone"
+        	android:singleLine="true"
+        	android:textColorLink="@android:color/white" />
+
+    	<Button
+        	android:id="@+id/contacts"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="20dp"
+        	android:text="@string/contact" 
+        	android:onClick="onContactsButtonClick"/>
+	</LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+   		<EditText
+   		    android:id="@+id/txtMessage"
+   		    android:layout_width="fill_parent"
+   		    android:layout_height="150dp"
+   		    android:layout_marginLeft="20dp"
+   		    android:layout_marginRight="20dp"
+   		    android:layout_marginTop="100dp"
+   		    android:gravity="top"
+   		    android:hint="@string/message"
+   		    android:textColorLink="@android:color/white" />
+   	
+   		 <Button
+       	 	android:id="@+id/sentSMS"
+       		android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_gravity="center_horizontal"
+        	android:text="@string/sentSMS" 
+        	android:onClick="onTellfriendButtonClick"/>
+   	</LinearLayout>
+ 
+        
+   
+</RelativeLayout>
+

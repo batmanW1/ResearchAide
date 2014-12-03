@@ -26,7 +26,9 @@
     <string name="location1">Division of Geriatric Medicine</string>
     <string name="location2">Penn Therapy and Fitness</string>
     <string name="location3">Presbyterian Medical Center: Neurology</string>
-    <string name="logo">Logo</string>
-    <string name="show">Show</string>
-
+     <string name="logo">Logo</string>
+     <string name="sentSMS">Send Message</string>
+     <string name="enterNo">Enter phone Number:</string>
+     <string name="message">Enter Message:</string>
+	<string name="contact">contancts</string>
 </resources>

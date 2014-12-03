@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,11 +20,14 @@ import com.amazonaws.services.dynamodbv2.model.*;
 public class MainActivity extends ActionBarActivity {
 
 	public static final int IndexActivity_ID = 1;
-	private EditText mUsernameEditText, mPasswordEditText;
-	private String username, password;
-	private boolean isUser;
-	private RedCapRecord user;
-	private SharedPreferences saveUser;
+	EditText mUsernameEditText;
+	String username;
+	EditText mPasswordEditText;
+	String password;
+	boolean isUser;
+	RedCapRecord user;
+	boolean gotUser;
+	private SharedPreferences saveUser ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +36,11 @@ public class MainActivity extends ActionBarActivity {
 
 		mUsernameEditText = (EditText) findViewById(R.id.userId);
 		mPasswordEditText = (EditText) findViewById(R.id.password);
-
+		
 		Context ctx = MainActivity.this;
 		saveUser = ctx.getSharedPreferences("userInfo", MODE_PRIVATE);
-
-		mUsernameEditText.setText(saveUser.getString("user_name", ""));
+		
+		mUsernameEditText.setText(saveUser.getString("user_name", ""));  
 		mPasswordEditText.setText(saveUser.getString("password", ""));
 
 	}
@@ -52,80 +54,70 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void onLogInButtonClick(View view) {
-		new VerifyLoginInfoTask().execute();
+		gotUser = false;
+		new Thread(runnable).start();
+		// we don't need the while loop here
+		while (true) {
+			if (gotUser) {
+				System.out.println("isUser: " + isUser);
+				System.out.println("user is " + user);
+				if (isUser == false || user == null) {
+					Toast toast = Toast.makeText(
+							MainActivity.this,
+							"Incorrect username or password. Please try again.",
+							Toast.LENGTH_LONG);
+					
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+					break;
+				} else {
+					
+					Editor editor = saveUser.edit();
+					editor.putString("user_name", username).commit();
+					editor.putString("password", password).commit();
+					
+					Toast toast = Toast.makeText(
+							MainActivity.this,
+							"Login Successful!",
+							Toast.LENGTH_LONG);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+					Intent i = new Intent(MainActivity.this, IndexActivity.class);
+					// passing the verified information to new activity
+					i.putExtra("verified_username", username);
+					i.putExtra("verified_password", password);
+					startActivityForResult(i, IndexActivity_ID);
+					finish();
+					break;
+				}
+			}
+		}
 	}
-	
-	private void makeToast(String message) {
-		Toast toast = Toast.makeText(MainActivity.this, message,
-				Toast.LENGTH_LONG);
 
-		toast.setGravity(Gravity.CENTER, 0, 0);
-		toast.show();
-	}
-
-	/**
-	 * This class runs on a separate thread as needed in order to make requests
-	 * to the RedCap database.
-	 */
-	private class VerifyLoginInfoTask extends
-			AsyncTask<Void, Void, RedCapRecord> {
-		
-		String message;
-
-		@Override
-		protected RedCapRecord doInBackground(Void... params) {
-//			message = "Verifying... Please wait.";
-//			makeToast(message);
+	Runnable runnable = new Runnable() {
+		public void run() {
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
 			user = RedCap.exportUser(username);
-			return user;
-		}
-
-		protected void onPostExecute(RedCapRecord user) {
-						
 			if (user != null) {
-				if (user.recordAttributes.get("email").equals(username)
-						&& user.recordAttributes.get("password").equals(
-								password)) {
+				if (user.recordAttributes.get("email").equals(username) &&
+						user.recordAttributes.get("password").equals(password)) {
 					isUser = true;
 				}
 			}
-			if (isUser == false || user == null) {
-				
-				// show message to user
-				message = "Incorrect username or password. Please try again.";
-				makeToast(message);
-				
-				// clear text field
-				mUsernameEditText.setText("");
-				mPasswordEditText.setText("");
-				
-			} else {
-				
-				// save verified login information for later use
-				Editor editor = saveUser.edit();
-				editor.putString("user_name", username).commit();
-				editor.putString("password", password).commit();
-				
-				// show message to user
-				message = "Login Successfully!";
-				makeToast(message);
-				
-				// passing the verified information to new activity
-				Intent i = new Intent(MainActivity.this, IndexActivity.class);
-				i.putExtra("record_id", user.recordAttributes.get("record_id"));
-				startActivityForResult(i, IndexActivity_ID);
-			}
+			gotUser = true;
 		}
-	}
+	};
 
 }
