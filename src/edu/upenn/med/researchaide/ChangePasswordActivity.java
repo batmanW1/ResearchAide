@@ -33,6 +33,7 @@ public class ChangePasswordActivity extends ActionBarActivity {
 	    Bundle extras = getIntent().getExtras();
 	    if (extras != null) {
 	    	userName = extras.getString("username");
+	    	
 	    	userPassword = extras.getString("old_password");
 	    }
 	    
