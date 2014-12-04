@@ -31,4 +31,7 @@
      <string name="enterNo">Enter phone Number:</string>
      <string name="message">Enter Message:</string>
 	<string name="contact">contancts</string>
+    <string name="schedule">Study Schedule</string>
+    <string name="compensation">Compensation Status</string>
+
 </resources>
