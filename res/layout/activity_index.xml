@@ -57,7 +57,7 @@
         android:id="@+id/ContactButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onDirectionButtonClick"
+        android:onClick="onContactUsButtonClick"
         android:contentDescription="@string/title_activity_contact"
         android:background="@drawable/contact" 
         android:layout_gravity="center" />

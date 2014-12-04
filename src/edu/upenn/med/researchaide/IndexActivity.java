@@ -52,5 +52,10 @@ public class IndexActivity extends Activity {
 		Intent i = new Intent(this, TellfriendActivity.class);
 		startActivity(i);
 	}
+	
+	public void onContactUsButtonClick(View view) {
+		Intent i = new Intent(this, ContactActivity.class);
+		startActivity(i);
+	}
 
 }
