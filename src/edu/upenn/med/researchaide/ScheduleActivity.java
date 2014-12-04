@@ -1,7 +1,21 @@
 package edu.upenn.med.researchaide;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
@@ -11,27 +25,17 @@ import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 
-import edu.upenn.med.researchaide.UserInfoActivity.GetScheduleTask;
-
-import android.support.v7.app.ActionBarActivity;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
 public class ScheduleActivity extends ActionBarActivity {
-
-//	static AmazonDynamoDBClient db = new AmazonDynamoDBClient(
-//			new BasicAWSCredentials("AKIAIZLADNMN2PLDBZNA",
-//					"fCjuyDhYVK28gIKtoVSCcwRI5suNatC3oJgy4vi"));
+	
+	private final long MILLISECONDS_PER_DAY = 86400000;
 	static AmazonDynamoDBClient db = new AmazonDynamoDBClient(
-			new BasicAWSCredentials("AKIAI5XSEH47DJ63FG2Q",
-					"ky7OiJmjNOMdnMaacXT3IFl8PdI4pl2duPdIQsIr"));
-	private String compensationStatus;
-	private TextView tv;
+			new BasicAWSCredentials("AKIAIZLADNMN2PLDBZNA",
+					"fCjuyDhYVK28gIKtoVSCcwRI5suNatC3oJgy4vi"));
+//	static AmazonDynamoDBClient db = new AmazonDynamoDBClient(
+//			new BasicAWSCredentials("AKIAI5XSEH47DJ63FG2Q",
+//					"ky7OiJmjNOMdnMaacXT3IFl8PdI4pl2duPdIQsIr"));
+	private String userSchedule;
+	private TextView[] tvs;
 	private String record_id;
 
 	@Override
@@ -45,8 +49,14 @@ public class ScheduleActivity extends ActionBarActivity {
 			record_id = extras.getString("record_id");
 		}
 		
-		tv = (TextView) findViewById(R.id.userSchedule);
-		new GetCompensationTask().execute();
+		tvs = new TextView[6];
+		tvs[0] = (TextView) findViewById(R.id.userSchedule1);
+		tvs[1] = (TextView) findViewById(R.id.userSchedule2);
+		tvs[2] = (TextView) findViewById(R.id.userSchedule3);
+		tvs[3] = (TextView) findViewById(R.id.userSchedule4);
+		tvs[4] = (TextView) findViewById(R.id.userSchedule5);
+		tvs[5] = (TextView) findViewById(R.id.userSchedule6);
+		new GetScheduleTask().execute();
 	
 	}
 
@@ -73,59 +83,90 @@ public class ScheduleActivity extends ActionBarActivity {
 	 * This class runs on a separate thread as needed in order to make requests
 	 * to the AWS DynamoDB database.
 	 */
-	public class GetCompensationTask extends AsyncTask<Void, Void, String> {
+	public class GetScheduleTask extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			// Find all record_id in DynamoDB that match record_id. For now,
-			// I've hardcoded 1111 as the record ID.
-			// This will need to be updated once
-			// we can pass the record_id from MainActivity to IndexActivity to
-			// this activity.
-			Condition hashKeyCondition = new Condition()
-					.withComparisonOperator(ComparisonOperator.EQ.toString())
-					.withAttributeValueList(new AttributeValue().withS("1111"));
-
-			// Since we cannot search DynamoDB using record_id alone, I've
-			// created this condition which will get
-			// all matches with "1111" as hash key and anything where visit_date
-			// is greater than "111102014"
-			Condition rangeKeyCondition = new Condition()
-					.withComparisonOperator(ComparisonOperator.GT.toString())
-					.withAttributeValueList(
-							new AttributeValue().withS("11102014"));
-
-			Map<String, Condition> keyConditions = new HashMap<String, Condition>();
-			keyConditions.put("record_id", hashKeyCondition);
-			keyConditions.put("visit_date", rangeKeyCondition);
-
-			// Sets up the DynamoDB request to only retrieve visit_date and
-			// compensation values.
-			QueryRequest queryRequest = new QueryRequest()
-					.withTableName("SCHEDULE").withKeyConditions(keyConditions)
-					.withAttributesToGet("visit_date", "compensation");
-
-			// Adds each result to the compensationStatus string to be put into
-			// the TextView.
-			QueryResult result = db.query(queryRequest);
-			compensationStatus = "Visit Date \t Compensation Status \n"; 
-			for (Map<String, AttributeValue> item : result.getItems()) {
-				compensationStatus += item.get("visit_date").getS() + "\t"
-						+ item.get("compensation").getS() + "\n";
-			}
-			return compensationStatus;
+//			// Find all record_id in DynamoDB that match record_id. For now,
+//			// I've hardcoded 1111 as the record ID.
+//			// This will need to be updated once
+//			// we can pass the record_id from MainActivity to IndexActivity to
+//			// this activity.
+//			Condition hashKeyCondition = new Condition()
+//					.withComparisonOperator(ComparisonOperator.EQ.toString())
+//					.withAttributeValueList(new AttributeValue().withS(record_id));
+//
+//			// Since we cannot search DynamoDB using record_id alone, I've
+//			// created this condition which will get
+//			// all matches with log-in record_id as hash key and anything where visit_date
+//			// is greater than current time
+//		    SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
+//			Condition rangeKeyCondition = new Condition()
+//					.withComparisonOperator(ComparisonOperator.GT.toString())
+//					.withAttributeValueList(
+//							new AttributeValue().withS(sdf.format(new Date())));
+//
+//			Map<String, Condition> keyConditions = new HashMap<String, Condition>();
+//			keyConditions.put("record_id", hashKeyCondition);
+//			keyConditions.put("visit_date", rangeKeyCondition);
+//
+//			// Sets up the DynamoDB request to only retrieve visit_date and
+//			// compensation values.
+//			QueryRequest queryRequest = new QueryRequest()
+//					.withTableName("SCHEDULE").withKeyConditions(keyConditions)
+//					.withAttributesToGet("visit_date", "compensation");
+//
+//			// Adds each result to the scheduleStatus string to be put into
+//			// the TextView.
+//			QueryResult result = db.query(queryRequest);
+//			userSchedule = "";
+//			for (Map<String, AttributeValue> item : result.getItems()) {
+//				userSchedule += item.get("visit_date").getS() + "\n";
+//			}
+			
+			// hard code for testing only
+			userSchedule = "12012014\n12122014\n12242014\n01012015" +
+					"\n02042015\n03032015\n08272015\n";
+			return userSchedule;
 		}
 
 		// Now we're back to the UI thread. compensationStatus is now added to
 		// the textView.
 		protected void onPostExecute(String userSchedule) {
-			tv.setText(compensationStatus);
+			BufferedReader br = new BufferedReader(new StringReader(userSchedule));
+			String line;
+			int i = 0;
+			try {
+				while ((line = br.readLine()) != null) {
+					if (i < 6) {
+						tvs[i].setText(DateFormat(line));
+						i++;
+					} else break;
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-	}
-
-	public void onBackButtonClick(View view) {
-		Intent i = new Intent(this, IndexActivity.class);
-		startActivity(i);
+		
+		private String DateFormat(String str_date) throws ParseException {
+			
+			String result;
+			DateFormat formatter = new SimpleDateFormat("MMddyyyy");
+			Date date = (Date) formatter.parse(str_date);
+			long elapsedTime = date.getTime() - System.currentTimeMillis();
+			
+			result = "Day " + elapsedTime / MILLISECONDS_PER_DAY + ": "
+					+ str_date.charAt(0) + str_date.charAt(1) + "/"
+					+ str_date.charAt(2) + str_date.charAt(3) + "/"
+					+ str_date.charAt(4) + str_date.charAt(5)
+					+ str_date.charAt(6) + str_date.charAt(7);
+			
+			return result;
+		}
 	}
 	
 }
