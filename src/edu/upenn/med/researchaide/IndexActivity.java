@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
-import edu.upenn.med.researchaide.RedCapRecord;
+import android.net.Uri;
 
+/**
+ * Serves as the menu for all actions/activities in ResearchAide application.
+ *
+ */
 public class IndexActivity extends Activity {
 
 	private String record_id;
@@ -24,28 +27,41 @@ public class IndexActivity extends Activity {
 		}
 	}
 	
+	/** Opens the activity to display the visitation schedule. */
 	public void onScheduleButtonClick(View view) {
 		Intent i = new Intent(this, ScheduleActivity.class);
+		i.putExtra("record_id", record_id);
 		startActivity(i);
 	}
 
+	/** Opens the activity to display directions to visitation locations. */
 	public void onDirectionButtonClick(View view) {
 		Intent i = new Intent(this, DirectionActivity.class);
 		startActivity(i);
 	}
 	
+	/** Opens the activity to display the compensation status of user's visits. */
 	public void onCompensationButtonClick(View view) {
 		Intent i = new Intent(this, CompensationActivity.class);
+		i.putExtra("record_id", record_id);
 		startActivity(i);
 	}
 	
+	/** Opens the activity for user to contact the study's director. */
 	public void onContactUsButtonClick(View view) {
 		Intent i = new Intent(this, ContactActivity.class);
 		startActivity(i);
 	}
 	
+	/** Opens the activity for a user to e-mail a friend about the study. */
 	public void onTellFriendButtonClick(View view){
 		Intent i = new Intent(this, TellfriendActivity.class);
+		startActivity(i);
+	}
+	
+	/** Opens the activity for a user to view ITMAP's website. */
+	public void onLearnMoreButtonClick(View view) {
+		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.itmat.upenn.edu"));
 		startActivity(i);
 	}
 

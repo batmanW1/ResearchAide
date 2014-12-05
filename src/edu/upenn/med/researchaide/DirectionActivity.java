@@ -10,6 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+/**
+ * Provides three locations for study visits and instantiates Google Maps
+ * so user can get directions to the selected location.
+ */
 public class DirectionActivity extends ActionBarActivity {
 
 	@Override
@@ -37,8 +41,9 @@ public class DirectionActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/*
-	 * start google map navigation mode to find the research location
+	/**
+	 * Starts the Google Map navigation mode to find the selected research location.
+	 * @param address The location to display in Google Maps.
 	 */
 	public void mapNavigation(String address) {
 		String uri = String.format(Locale.US,

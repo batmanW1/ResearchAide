@@ -17,9 +17,6 @@ import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
-
-import edu.upenn.med.researchaide.ScheduleActivity.GetScheduleTask;
-
 import android.support.v7.app.ActionBarActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,12 +24,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+/**
+ * Obtains and displays the compensation status of a user's research study visits.
+ *
+ */
 public class CompensationActivity extends ActionBarActivity {
 	
 	private final long MILLISECONDS_PER_DAY = 86400000;
-	// static AmazonDynamoDBClient db = new AmazonDynamoDBClient(
-	// new BasicAWSCredentials("AKIAIZLADNMN2PLDBZNA",
-	// "fCjuyDhYVK28gIKtoVSCcwRI5suNatC3oJgy4vi"));
+	// This AWSAccessKeyID / AWSSecret key will be invalidated after the demo on 12/8/2014.
 	static AmazonDynamoDBClient db = new AmazonDynamoDBClient(
 			new BasicAWSCredentials("AKIAI5XSEH47DJ63FG2Q",
 					"ky7OiJmjNOMdnMaacXT3IFl8PdI4pl2duPdIQsIr"));
@@ -86,55 +85,51 @@ public class CompensationActivity extends ActionBarActivity {
 	 */
 	public class GetCompensationTask extends AsyncTask<Void, Void, String> {
 
+		/**
+		 * Makes the call to AWS DynamoDB to retrieve the date of research study visit and
+		 * the compensation status for that visit.
+		 */
 		@Override
 		protected String doInBackground(Void... params) {
-//			// Find all record_id in DynamoDB that match record_id. For now,
-//			// I've hardcoded 1111 as the record ID.
-//			// This will need to be updated once
-//			// we can pass the record_id from MainActivity to IndexActivity to
-//			// this activity.
-//			Condition hashKeyCondition = new Condition()
-//					.withComparisonOperator(ComparisonOperator.EQ.toString())
-//					.withAttributeValueList(new AttributeValue().withS(record_id));
-//
-//			// Since we cannot search DynamoDB using record_id alone, I've
-//			// created this condition which will get
-//			// all matches with "1111" as hash key and anything where visit_date
-//			// is greater than "111102014"
-//			SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
-//			Condition rangeKeyCondition = new Condition()
-//					.withComparisonOperator(ComparisonOperator.GT.toString())
-//					.withAttributeValueList(
-//							new AttributeValue().withS(sdf.format(new Date())));
-//
-//			Map<String, Condition> keyConditions = new HashMap<String, Condition>();
-//			keyConditions.put("record_id", hashKeyCondition);
-//			keyConditions.put("visit_date", rangeKeyCondition);
-//
-//			// Sets up the DynamoDB request to only retrieve visit_date and
-//			// compensation values.
-//			QueryRequest queryRequest = new QueryRequest()
-//					.withTableName("SCHEDULE").withKeyConditions(keyConditions)
-//					.withAttributesToGet("visit_date", "compensation");
-//
-//			// Adds each result to the compensationStatus string to be put into
-//			// the TextView.
-//			QueryResult result = db.query(queryRequest);
-//			compensationStatus = "";
-//			for (Map<String, AttributeValue> item : result.getItems()) {
-//				compensationStatus += item.get("visit_date").getS() + "\n"
-//						+ item.get("compensation").getS() + "\n";
-//			}
-			
-			// hard code for testing only
-			compensationStatus = "12012014\nyes\n12122014\nno\n12242014" +
-					"\npending\n01012015\nyes\n02042015\n" +
-					"no\n03032015\nno\n08272015\nno\n";
+			// Creates the condition to find all entries in DynamoDB that match user's record_id. 
+			Condition hashKeyCondition = new Condition()
+					.withComparisonOperator(ComparisonOperator.EQ.toString())
+					.withAttributeValueList(new AttributeValue().withS(record_id));
+
+			// Since we cannot search DynamoDB using record_id alone, this condition will get
+			// visit dates with today's date and in the future.
+			SimpleDateFormat sdf = new SimpleDateFormat("MMddyyyy");
+			Condition rangeKeyCondition = new Condition()
+					.withComparisonOperator(ComparisonOperator.GT.toString())
+					.withAttributeValueList(
+							new AttributeValue().withS(sdf.format(new Date())));
+
+			// Puts our record_id and visit_date conditions together to send to DynamoDB.
+			Map<String, Condition> keyConditions = new HashMap<String, Condition>();
+			keyConditions.put("record_id", hashKeyCondition);
+			keyConditions.put("visit_date", rangeKeyCondition);
+
+			// Sets up the DynamoDB request to only retrieve visit_date and
+			// compensation values.
+			QueryRequest queryRequest = new QueryRequest()
+					.withTableName("SCHEDULE").withKeyConditions(keyConditions)
+					.withAttributesToGet("visit_date", "compensation");
+
+			// Adds each result to the compensationStatus string to be put into
+			// the TextView.
+			QueryResult result = db.query(queryRequest);
+			compensationStatus = "";
+			for (Map<String, AttributeValue> item : result.getItems()) {
+				compensationStatus += item.get("visit_date").getS() + "\n"
+						+ item.get("compensation").getS() + "\n";
+			}
 			return compensationStatus;
 		}
 
-		// Now we're back to the UI thread. compensationStatus is now added to
-		// the textView.
+		/**
+		 * This method, handled by the original UI thread, now puts the return value from DynamoDB into
+		 * the appropriate text field.
+		 */
 		protected void onPostExecute(String compensationStatus) {
 			BufferedReader br = new BufferedReader(new StringReader(
 					compensationStatus));
@@ -162,6 +157,12 @@ public class CompensationActivity extends ActionBarActivity {
 			}
 		}
 
+		/**
+		 * Formats the returned date string from DynamoDB. 
+		 * @param str_date The visit_date string from DynamoDB
+		 * @return The formatted date string
+		 * @throws ParseException
+		 */
 		private String DateFormat(String str_date) throws ParseException {
 
 			String result;
@@ -169,7 +170,7 @@ public class CompensationActivity extends ActionBarActivity {
 			Date date = (Date) formatter.parse(str_date);
 			long elapsedTime = date.getTime() - System.currentTimeMillis();
 
-			result = "Day " + elapsedTime / MILLISECONDS_PER_DAY;
+			result = "Day " + ((elapsedTime / MILLISECONDS_PER_DAY) + 1);
 
 			return result;
 		}

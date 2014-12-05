@@ -75,7 +75,7 @@
         android:id="@+id/LearnMoreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onDirectionButtonClick"
+        android:onClick="onLearnMoreButtonClick"
         android:contentDescription="@string/title_activity_more"
         android:background="@drawable/learnmore"
 		android:layout_gravity="center" />

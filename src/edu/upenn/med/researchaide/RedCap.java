@@ -240,18 +240,12 @@ public class RedCap {
 				String userDetailsString = null;
 
 				while ((userDetailsString = br1.readLine()) != null) {
-					System.out.println(userDetailsString);
 					// Verifies username field only contains username. So username "johndoe" and username "johndoes" does not return 'true.'
 					if (userDetailsString.contains(",\"" + userName + "\",")) {
 						break;
 					}
 				}
-
-			//				// Headers is printing out: "record_id, recap_event_name, name,
-			//				// email, password, my_first_instrument_complete, email_complete
-			//				// UserDetailsString is always null.
-			//				System.out.println("headersString: " + headersString);
-			//				System.out.println("userDetailsString: " + userDetailsString);
+				
 
 			String[] headers = headersString.replaceAll("\"", "")
 					.split(",");

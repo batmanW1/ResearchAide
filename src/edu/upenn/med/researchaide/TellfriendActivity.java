@@ -5,12 +5,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Contacts;
-import android.provider.Telephony.Sms;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -19,6 +16,11 @@ import android.widget.Toast;
 import android.view.View;
 
 @SuppressWarnings("deprecation")
+
+/**
+ * Handles functionality for user to text message a friend about study participation.
+ *
+ */
 public class TellfriendActivity extends ActionBarActivity {
 
 	Button btnSendSMS;
@@ -58,6 +60,11 @@ public class TellfriendActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/**
+	 * Sends a text message to user's friend/contact.
+	 * @param phoneNo The phone number to send the message to.
+	 * @param mes The message to send.
+	 */
 	private void send(String phoneNo, String mes) {
 		PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this,
 				TellfriendActivity.class), 0);
@@ -66,6 +73,10 @@ public class TellfriendActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * Retrieves phone number and message from user input and sends text message.
+	 * @param view
+	 */
 	public void onTellfriendButtonClick(View view) {
 		String phoneNo = txtPhoneNo.getText().toString();
 		String message = txtMessage.getText().toString();
@@ -77,6 +88,7 @@ public class TellfriendActivity extends ActionBarActivity {
 					.show();
 	}
 
+	/** Opens user's contacts so user can select a friend to send a message to. */
 	public void onContactsButtonClick(View view) {
 		Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
 				ContactsContract.Contacts.CONTENT_URI);
@@ -98,6 +110,10 @@ public class TellfriendActivity extends ActionBarActivity {
 		}
 	}
 
+	/** If user opens contacts, this method gets the phone number of the contact the user clicked on and passes it
+	 * back to this activity.
+	 * @return The contact's phone number.
+	 */
 	private String getContactPhone(Cursor cursor) {
 		int phoneColumn = cursor
 				.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER);
@@ -115,9 +131,8 @@ public class TellfriendActivity extends ActionBarActivity {
 				for (; !phone.isAfterLast(); phone.moveToNext()) {
 					int index = phone
 							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-					int typeindex = phone
-							.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
-					int phone_type = phone.getInt(typeindex);
+					//int typeindex = phone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+					//int phone_type = phone.getInt(typeindex);
 					String phoneNumber = phone.getString(index);
 					result = phoneNumber;
 				}

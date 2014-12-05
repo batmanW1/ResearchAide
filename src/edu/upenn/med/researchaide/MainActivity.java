@@ -13,11 +13,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.services.dynamodbv2.*;
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.amazonaws.services.dynamodbv2.model.*;
 
+/**
+ * Handles user login functionality
+ *
+ */
 public class MainActivity extends ActionBarActivity {
 
 	public static final int IndexActivity_ID = 1;
@@ -59,10 +59,12 @@ public class MainActivity extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/** Calls inner class to verify email and password credentials with RedCap database. */
 	public void onLogInButtonClick(View view) {
 		new VerifyLoginInfoTask().execute();
 	}
 	
+	/** Called to display a temporary message about whether login was successful or unsuccessful. */
 	private void makeToast(String message) {
 		Toast toast = Toast.makeText(MainActivity.this, message,
 				Toast.LENGTH_LONG);
@@ -80,16 +82,16 @@ public class MainActivity extends ActionBarActivity {
 		
 		String message;
 
+		/** Makes RedCap database call to get information for email(username) and password credentials. */
 		@Override
 		protected RedCapRecord doInBackground(Void... params) {
-//			message = "Verifying... Please wait.";
-//			makeToast(message);
 			username = mUsernameEditText.getText().toString();
 			password = mPasswordEditText.getText().toString();
 			user = RedCap.exportUser(username);
 			return user;
 		}
 
+		/** Verifies email(username) and password credentials entered by user with returned data about user from RedCap */
 		protected void onPostExecute(RedCapRecord user) {
 						
 			if (user != null) {

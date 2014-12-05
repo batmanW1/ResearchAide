@@ -64,6 +64,8 @@
             android:name=".ContactActivity"
             android:label="@string/title_activity_contact" >
         </activity>
+        <activity android:name="ScheduleActivity"></activity>
+        <activity android:name="CompensationActivity"></activity>
     </application>
 
 </manifest>

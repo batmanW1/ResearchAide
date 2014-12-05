@@ -26,15 +26,14 @@
     <string name="location1">Division of Geriatric Medicine</string>
     <string name="location2">Penn Therapy and Fitness</string>
     <string name="location3">Presbyterian Medical Center: Neurology</string>
-     <string name="logo">Logo</string>
-     <string name="sentSMS">Send Message</string>
-     <string name="enterNo">Enter phone Number:</string>
-     <string name="message">Enter Message:</string>
-	<string name="contact">contancts</string>
+    <string name="logo">Logo</string>
+    <string name="sentSMS">Send Message</string>
+    <string name="enterNo">Enter phone Number:</string>
+    <string name="message">Enter Message:</string>
+	<string name="contact">Contacts</string>
     <string name="schedule">Study Schedule</string>
     <string name="compensation">Compensation Status</string>
     <string name="subject">Subject</string>
-    <string name="message">Message</string>
-    <string name="contact_us">Contact_us</string>
+    <string name="contact_us">Contact Us</string>
 
 </resources>
