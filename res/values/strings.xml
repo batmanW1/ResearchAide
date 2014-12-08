@@ -23,6 +23,8 @@
     <string name="title_activity_contact">Contact Us</string>
     <string name="title_activity_consent">Consent Form</string>
     <string name="title_activity_more">Learn More About ITMAT</string>
+    <string name="title_activity_getcontacts">Get a contact</string>
+    <string name="title_activity_sendSMS">Send a SMS</string>
     <string name="location1">Division of Geriatric Medicine</string>
     <string name="location2">Penn Therapy and Fitness</string>
     <string name="location3">Presbyterian Medical Center: Neurology</string>

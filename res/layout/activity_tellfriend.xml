@@ -7,54 +7,79 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
-        
-    	<EditText
-        	android:id="@+id/txtPhoneNo"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_marginTop="20dp"
-        	android:layout_marginLeft="20dp"
-        	android:hint="@string/enterNo"
-        	android:inputType="phone"
-        	android:singleLine="true"
-        	android:textColorLink="@android:color/white" />
+        android:orientation="horizontal" 
+        android:layout_gravity="center_horizontal">
 
-    	<Button
-        	android:id="@+id/contacts"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_marginTop="20dp"
-        	android:text="@string/contact" 
-        	android:onClick="onContactsButtonClick"/>
-	</LinearLayout>
-    
+        <EditText
+            android:id="@+id/txtPhoneNo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.45"
+            android:background="@drawable/border"
+            android:hint="@string/enterNo"
+            android:inputType="phone"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColorLink="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/contacts"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginEnd="35dp"
+            android:layout_marginRight="35dp"
+            android:background="@drawable/contacts"
+            android:contentDescription="@string/title_activity_getcontacts"
+            android:onClick="onContactsButtonClick" />
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical" >
 
-   		<EditText
-   		    android:id="@+id/txtMessage"
-   		    android:layout_width="fill_parent"
-   		    android:layout_height="150dp"
-   		    android:layout_marginLeft="20dp"
-   		    android:layout_marginRight="20dp"
-   		    android:layout_marginTop="100dp"
-   		    android:gravity="top"
-   		    android:hint="@string/message"
-   		    android:textColorLink="@android:color/white" />
-   	
-   		 <Button
-       	 	android:id="@+id/sentSMS"
-       		android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_gravity="center_horizontal"
-        	android:text="@string/sentSMS" 
-        	android:onClick="onTellfriendButtonClick"/>
-   	</LinearLayout>
- 
-        
+        <EditText
+            android:id="@+id/txtMessage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/border"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="@string/message"
+            android:padding="10dp"
+            android:textColorLink="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/sentSMS"
+            android:layout_width="152dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/send"
+            android:contentDescription="@string/title_activity_sendSMS"
+            android:onClick="onTellfriendButtonClick"
+            android:text="@string/sentSMS" />
+
+        <ImageView
+            android:id="@+id/slogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:contentDescription="@string/logo"
+            android:src="@drawable/slogo" />
+    </LinearLayout>
    
 </RelativeLayout>
 

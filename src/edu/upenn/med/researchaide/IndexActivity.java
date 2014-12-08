@@ -50,6 +50,7 @@ public class IndexActivity extends Activity {
 	/** Opens the activity for user to contact the study's director. */
 	public void onContactUsButtonClick(View view) {
 		Intent i = new Intent(this, ContactActivity.class);
+		i.putExtra("record_id", record_id);
 		startActivity(i);
 	}
 	
